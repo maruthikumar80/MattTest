@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<head>
+    <title>Hello World</title>
+    <script
+            src="https://cdn.jsdelivr.net/npm/@ryangjchandler/alpine-tooltip@1.x.x/dist/cdn.min.js"
+            defer
+        ></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
+        <script>
+        window.addEventListener('load', function() {
+
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            link.setAttribute('type', 'text/css');
+            link.setAttribute('href', 'https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900s');
+            document.head.appendChild(link);
+
+            const parentDiv = document.createElement("div");
+            parentDiv.setAttribute("id", "parentDiv");
+            parentDiv.style.width = "100%";
+            parentDiv.style.height = "100%";
+            parentDiv.style.display = "none";
+            parentDiv.style.position = "fixed";
+            parentDiv.style['z-index'] = "100000";
+            parentDiv.style.left = "0";
+            parentDiv.style.top = "0";
+
+            const modalContent = document.createElement("div");
+            modalContent.setAttribute("id", "modalContent")
+            modalContent.style.position = "absolute";
+            modalContent.style.top = "120px";
+            modalContent.style.left = "550px";
+            modalContent.style['background-color'] = "white";
+            modalContent.style.width = "799px";
+            modalContent.style.height = "640px";
+            modalContent.style['border-radius'] = "0.5rem";
+            modalContent.style.border = "1px solid rgba(0, 0, 0, .2)";
+
+
+            var imageElem = document.createElement("img");
+            imageElem.setAttribute("src", "data:image/bmp;base64,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");
+            //imageElem.addEventListener("click", toggleDisplay);
+            imageElem.style.position = "fixed";
+
+            var closeModal = document.createElement("img");
+            closeModal.setAttribute("src", "data:image/bmp;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA7RSURBVGhDjVptb1bHEeW32X4eY6clUdREhJcQ2aiBVJR30oSQiEipElVRQAVaQ8E2f/T2vMzZ3XttSD6Mdnd25pyZ2b179z72mdXWatra2pq2VhC2kM1qtzC3WfrNTfS3NqcttJmTaLyaVpvx2ZpWbOVHn67fgo3miFM6jyErYAiT/OnTv3TFvwkMY1qfeE7wl8T2DIEIoMlNB6DkhsTZX1VwPTC2PWABKghjGc9ztk/SxcFAgSH+1Sn86/KjhF9t1/0e/5g8VtQGMbYRyKljIKx09WcrVOMUYGtNAgS/uXaQCr6qDllXABoXHn07/2raYJ968kLHuc5XWOINNqUwtCPQcoXBT4zgUs64Q4XFwVRlZQghMecybmISB9MTabYKqgRj2dVKtQRawB4v+TUu/th0+R3+GlO0dQVcgdGA1VK1FSjmy8lVhG307AsIfeniQz3nPSditAwkwVjwzMWu+Nk22wW/VxU+C37be/wufqxogUBUGRpCXKUIA2Jbzu1AIglAFSS3O/VFWH7xb/3Cj/8oI2fvG49jJ4M2iUtX/Ovw49GZ8brFirJjgDGAtYLPXO1/iE7e6ntcZEPbVqnJ0gfjrI50J/l7Mp7LbjjBr2fTq9z4hd1tlKiTSIBQsipjxXkSCiQ6B0jxc8hxdMZw8PRhle2TAHNIZKsZu/sKi7rEUCdx277lp3igU1KytW4sMjHCXytalS0H9WnAcYSOFVBIBDgGgH5sZFd+8XefdrRxQOSij1vaVP9U/hQDUrwj32ljCfzPtIph4AQ8XlfgqhTmTh4AaTt5C4J2wnMySoQY7BOn8NoBQh+N0Ra/7MKPMX2Nj/mhoMJWe5KfRaWeNjqMmkFVyQA0jL6falm5rIiDyxz1fVvpgJAuPhbNxw5yGn/jlr748W5uWONzqMetJ24dbYLN9ygHpSRxSLWiGvcEkkwCVL+BLSV+kKzSmAhEfu/gz244jX9dNpLip73bzM35sXUxCWM6uKI0qAOqyGkcoOYsewczJk6Mza0N2Tc7SuE2vsFe/sKjDnbEZR+69/I3HCdFWxbTV8riL9vZe1TAARcpxQSbw7Ocysk2wZVeV0DaY+wAihTBj4GuhJdgqpWPcWNnfgjt64Q1j2NoxWl6b/Ml/xlmT0BNtOROikBnAfSx5hSssbQbgqXnp/plOyac6p/gX3CZo+TUuX5R0JhYwjS/VtSr4qrayQ6uTvUhfF5Y3aXOrcfq4xByf7GKkn4INX3jJzb7A38tBIXPMvFmukWrfhWCWNH7PdpOxzKctaxIARcAk/Mz0AmbDaQXAoVBcEnMNxYXwUnXSkKf4GTHFuPwB6/hDPzR8esp/omLBRE/sHTqqqJc4nLUM6IqF3j1N8d7ZAJj8G17EoPiIInjE7J8hNP9tTLh0rM98Muv+NWSg5Ikak7+nVN+Fa84Kh6t6AqG/SoFh3JUn/NttaAniJLjmFs5cyHenB7cuz+9fv16unv37rS9fbbNW9YtINqbH+2Cf3d3d3r48OH0+vBw+ttX14xNWfDHpwn4advsS+rUrWBDxMouAZrQdvxC8Kq1iiOAp0+eTMfHh9Mhgrxx48Z09uzZvjXR8gR1UUo3k9W0s7MzPX78WP7HR8fTTz/9U3pzUtjfgNhHq6sCQFQASo+P+fgXBg3o3A3HRNuWoBRYn8/z3YH39vamg5cvFeRLtLdu3sLKbstGvyJQ4N8ShoT/w3Pnpq+//no6Ojqcjg6PpufPnk2fnj9vH9os+VHcJT8lO4V9LoKe0RhRYWKM896kEJjbewZGm4GwfBU8yPf29qcXz59PR8fHkKPp7p3b0w5W1qtR/mzpX4/G7s7u9GNWEkk+wc44zyQX/C0x6ocTPvweW2QLjjM5EKLgCSwH9Ne13+nA33wEXrbUa7uyagHHXLbwerU9ffHFFT2rb7Wyr6Ybf78xbZ/FttdvOuBRoeCL9uzO2ekOnulDbPljFOa/Lw+mixfOy47YPnnRr8RYYD7XXjXGSV7rE1cS56Pl9ygn0I6AfqaYtLeGqwjh6QiQ8ZmLL8W2lTh8r315bXrxH6/s6zeH053bd6btNbdx9/lg94Pp++8eYSWPsN0PsV1fTH/55BP5r+rw6vxO4o/w01cLgWJ666oqTM6raSM4SJ+go3dRRFS+yy2t1UKrXYGk9vev6lnlSr16hZXFAeVtvOnT9duH2q5Hb9/qIPv888/hh3hG/gq48etHNvQ3GEsSg7APXvHTT3HWhzeV/VmL9OCVfBXD7aCPEJxzw6tpPDCuY2VfHbzUyr5Esrdu3Zw+/vhjHTz/w7ZmEQ4ODqbzn2G7ansOwRMjvAv+ttKIbckfDNr0D28YzZxKlzFbAQ8F8Uoyea7eSAChL5Ov/nq9nvZxQD3HAXWMZLmCv/36K9o3Op2f/PZkunz5cvkXFvzknzHwzO/xnJ/6QSr28NczikEFyu9QHfWnOhK0+q1ydWDV9ulbLVuHWCgc8Phs7l+9Or3BAcWTmAlrhbHSFy5cqC3vgo/nhmIRP7DRbmK78hTuMZc97RJH+AtHiVLB6syePwFbsgUZhG9JLIYTHHeB+hXAPHnqjfvRRx9NP//yr+ntWydJ+f6HH/DMbpsf/o6n/ComSvjNu+AHp/lxAJ3CrwuDDBBEWhmg9bvLhkm223icFfXz4XFkYygW7fme5LWO2/YtVvQQSbJtBxRuROYjP3Br1yjokhZr+JMMx43f7XgJwopiIgGxhUOvlLecndwa5HShjeyLUO/ACujchx9Ojx49VFK89TzDjec+7sQvXjzD5cA3qHt3703bO1xZ+JSf2/fx9xUPf3+3oi2ctnVlHHA598pER0d9jcAuNxAVRX70wQ4AiZ9xB8CtxlfId4++mw55rcOW5Y3n8uUruANvT3v7e9OzOqCOsNK6G2Nl/T5f8jsG8oWflxqOndSCH/08au2u25OkoQ8lBV56f9EAVNUaJNtr0PvTzPKnc3/GK+Qf0yEuC7y78j35Ga51OXh4B+bdmDenoyNsY7S3b9/FNvZ1ceTn+7LxJ95T+InrxJ0LdXiPAgAJaKKqpAoRKGAcV2XnhSk/iABBFizKDlby8Y++u/KU/Q1JXrp0UXO6nAAjJ/xVrOzzf2MbY2X5yrl5+6a+emb8as3nq6BjEj/jUbK0cxE9tpz691GuSCqnQFg1AmHMKqvVmP36XOL9lW1VePeD3enBgwdeSbwnnz7NjaeuZcIqDLwueIPa29+f3vC9imQP8MrhNl7lutj4h2Thy8JKlyIkVm7dwQ7P6KgIiJ2ZLMesVlZstM2Kenv01eXp+Qh3Vx88/tS6dPGSySvgbCkVsvrcztev4W78/JmKw0+9Wzdv4kMA37Oymcf6Ln6Ox61M0dZVYpxgVZScddq+7Densk3F8MwYnPruc//+PWw/XtB58DydLuHGs8LXDDESjIWn6bDN4MsVv4qVffnqQO9a4ly//pXtV9gN4U8swpnzW8+x55h4fY9aUuVl3wGhzXYYqqVnR0ECUNt2Nf3yy89eSawMD551yOOnk7D6g2glIEz2r9e+1N2XOD/iOXc8THTu04vU+XsBeutfAZN9qxQAWjJ2FiDmU4CsjINzIaK7cPHy9M0330wXL17UuBPaxs+VA5rzFw+Ep/6VK1emb3HB+PSTT0tfz+QQp3dE+M2TxyFYLVEvd5JA1fiJRD0deRLXvJy1qtyyBh3nKPYbx7RPgOhTgOn3MQKEv7CIQ8GqKB7hFj9tq/B5rDxPvN6S2zlACkOHKjjbZ1ozSF8GlhTCq+G2bcO0tEOfWLFvMhs7UbbBa5xjf+SvE50v/xP8sG/Yxc++bCLAqM80V8QAg6HAfOCQoB1cCjJ2G0OQFn3ZKznac4wAMXaQVX2I/wZrnJP8nAueW/PM+XUzms1TalcQA2Pazq+ArUrdyHoCZ8wA2J/POzFKBU4sJtR8Ml+SBCFz/gEX4uTD7yRPYmWO49P5T/n7qImSWF7IHahXWBKwJflg31YJNrRNYmpP8HuuF/Z3+LGtwx9fYtG+2YFfKyqFDomaEAluPHKwkFjXLAUE0gos87aBkFDvV2DEXwcY++uWVPPDWNtMvwFRmBBjMUfs/INAH3f7YJeM/BwXthJtQiVECQxJk6D9XoqgU8Fux6ByiDjBdpqqsiYdA53/fbSkCpKCWT/yF3bNNzsmVnpv85P87e+jSjLgAaOOLQxd0bKVs4k0L18G6XkREIvBkLhwJAts8aLVbin+4MZ2phuk8UP6QVl6clNXhffWFQEN4+xEXJ0kBzBUVUEOuoAnIPXHH5kH/Qz7hH7Or7klP/pL/hQ/Z4v6VTzr3fpmtKhc+m5HMoMRvF8cbDv7+2TtEiWqylo//sWMOlZ8yS+7odWqBK/peeGoe2/pgut+9ChM8bcfsLXFKnAGaFBuWc87YTvnoNBY/ilAxhUk+vQPrnHYZ/DAY0C030BfGA6wbWv5xg9SxQ2P+YFX/LYnVvUHft+MGFhVW6vAQMrRAVcA1BOEthW0SCkJjsSlSxtRAvBtPpAlv3QsupJyLKtxt4jfPiN/K87AP8pw6hI44GXcyK2n5DeYVJ8tbUVcV7Xo48NgEhCfH20nYROnsBl8BetHw/0mnFd/yY9CoBU/fbi6C18euH/476O9YhAFmnmv0HhAxKdhBRs2SZg4PNx6cnN+f9plrvdP8KNYnj+Fv4T87/n7KNsaExiV6idctxkTpm1730K4arIdONZaxfjM50b+LIDkvfzB6/zx1Zh9cCDRckarlywcZZAA2EpfwUjv1s8sZKPmsHV9UafYzqtGnEpi7RuXnj2NGdiw0rzxhJPjOvh4eWcy8oVOhyTH8SNfHp0kT5xKvK6A3cFbEEHImMGwkl6ZlhhA27sqbUmrtuZs24opf4yrCApKbf/lIPz5s6D5C1eBF38OqFP4Z2cM7cHvw6iI8xOkq19AaRfBJVGdmGXTjnnM0b//v0LpEZwKBmLvkI6dwIJP0b0YNtSt8AqKXnNJMPyJh7jF3+ICbvvw7s9aOZSR+2gr0daWXpWmEJxzw7ZNIrIZ/JoggHfxj7LkTzFGfvYbf+k6/9b0fymRKTSP5WsHAAAAAElFTkSuQmCC");
+            closeModal.addEventListener("click", toggleDisplay);
+            closeModal.style.cursor = "pointer";
+            closeModal.style.float ="right";
+            closeModal.style.width ="45px";
+            closeModal.style.top ="10px";
+            closeModal.style.right ="5px";
+            closeModal.style.position = "absolute";
+
+            const nameSpan = this.document.createElement("span");
+            nameSpan.innerHTML = "Name *";
+            nameSpan.style['padding-top'] = "10px";
+            nameSpan.style['margin-left'] = "15px";
+            nameSpan.style.display = "block";
+            nameSpan.style.width = "auto";
+            nameSpan.style['font-family'] = "Roboto";
+            nameSpan.style['font-weight'] = "400";
+            nameSpan.style['font-size'] = "14.5px";
+
+            const nameinput = document.createElement("input");
+            nameinput.setAttribute("type", "text");
+            nameinput.setAttribute("id", "name");
+            nameinput.style['margin-left'] = "15px";
+            nameinput.style.display = "block";
+            nameinput.style['border-radius'] = "5px";
+            nameinput.style.border = "1px solid lightgrey";
+            nameinput.style.background = "none";
+            nameinput.style.width = "766px";
+            nameinput.style.height = "34px";
+            nameinput.style.outline = "none";
+            nameinput.readOnly = "true";
+            nameinput.style['font-family'] = "Roboto";
+            nameinput.style['font-weight'] = "400";
+            nameinput.style['font-size'] = "14.5px";
+           
+
+            const emailSpan = this.document.createElement("span");
+            emailSpan.innerHTML = "Email *";
+            emailSpan.style['margin-left'] = "15px";
+            emailSpan.style['padding-top'] = "10px";
+            emailSpan.style.display = "block";
+            emailSpan.style.width = "auto";
+            emailSpan.style['font-family'] = "Roboto";
+            emailSpan.style['font-weight'] = "400";
+            emailSpan.style['font-size'] = "14.5px";
+
+            const emaiInput = document.createElement("input");
+            emaiInput.setAttribute("type", "text");
+            emaiInput.setAttribute("id", "email");
+            emaiInput.style['margin-left'] = "15px";
+            emaiInput.style.display = "block";
+            emaiInput.style['border-radius'] = "5px";
+            emaiInput.style.border = "1px solid lightgrey";
+            emaiInput.style.background = "none";
+            emaiInput.style.width = "766px";
+            emaiInput.style.height = "34px";
+            emaiInput.style.outline = "none";
+            emaiInput.readOnly = "true";
+            emaiInput.style['font-family'] = "Roboto";
+            emaiInput.style['font-weight'] = "400";
+            emaiInput.style['font-size'] = "14.5px";
+
+
+            const phoneSpan = this.document.createElement("span");
+            phoneSpan.innerHTML = "Phone";
+            phoneSpan.style['padding-top'] = "10px";
+            phoneSpan.style['margin-left'] = "15px";
+            phoneSpan.style.display = "block";
+            phoneSpan.style.width = "auto";
+            phoneSpan.style['font-family'] = "Roboto";
+            phoneSpan.style['font-weight'] = "400";
+            phoneSpan.style['font-size'] = "14.5px";
+
+            const phoneInput = document.createElement("input");
+            phoneInput.setAttribute("type", "text");
+            phoneInput.setAttribute("id", "phone");
+            phoneInput.style['margin-left'] = "15px";
+            phoneInput.style.display = "block";
+            phoneInput.style['border-radius'] = "5px";
+            phoneInput.style.border = "1px solid lightgrey";
+            phoneInput.style.background = "none";
+            phoneInput.style.width = "766px";
+            phoneInput.style.height = "34px";
+            phoneInput.style['font-family'] = "Roboto";
+            phoneInput.style['font-weight'] = "400";
+            phoneInput.style['font-size'] = "14.5px";
+            phoneInput.style['outline'] = "none";
+            phoneInput.addEventListener('input', function(e) {
+                var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+            });
+
+
+            const requestTypeSpan = this.document.createElement("span");
+            requestTypeSpan.innerHTML = "Request Type *";
+            requestTypeSpan.style['padding-top'] = "10px";
+            requestTypeSpan.style['margin-left'] = "15px";
+            requestTypeSpan.style.display = "block";
+            requestTypeSpan.style.width = "auto";
+            requestTypeSpan.style['font-family'] = "Roboto";
+            requestTypeSpan.style['font-weight'] = "400";
+            requestTypeSpan.style['font-size'] = "14.5px";
+
+            var select = document.createElement("select");
+            const requesttypeInput = document.createElement("option");
+            const requesttypeInput1 = document.createElement("option");
+            const requesttypeInput2 = document.createElement("option");
+            requesttypeInput.setAttribute("type", "text");
+            requesttypeInput.setAttribute("id", "requesttype");
+            requesttypeInput.value = "Issue";
+            requesttypeInput.text = "Issue";
+            requesttypeInput1.value = "Question";
+            requesttypeInput1.text = "Question";
+            requesttypeInput2.value = "Feature Request";
+            requesttypeInput2.text = "Feature Request";
+            select.appendChild(requesttypeInput);
+            select.appendChild(requesttypeInput1);
+            select.appendChild(requesttypeInput2);
+
+            select.style['padding-left'] = "5px";
+            select.style['margin-left'] = "15px";
+            select.style.display = "block";
+            select.style['border-radius'] = "5px";
+            select.style.border = "1px solid lightgrey";
+            select.style.background = "none";
+            select.style.width = "766px";
+            select.style.height = "34px";
+            select.style.outline = "none";
+            select.style['font-family'] = "Roboto";
+            select.style['font-weight'] = "400";
+            select.style['font-size'] = "14.5px";
+            select.style['background'] = "linear-gradient(45deg, transparent 50%, darkgrey 70%),linear-gradient(135deg, darkgrey 70%, transparent 50%)"; //, linear-gradient(to right, skyblue, skyblue)";
+            select.style['background-position'] = "calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), 100% 0";
+            select.style['background-size'] = "5px 5px, 5px 5px, 3.5em 3.5em";
+            select.style['background-repeat'] = "no-repeat";
+            select.style['-moz-appearance'] = "none";
+            select.style['-webkit-appearance'] = "none";
+            select.style['appearance'] = "none";
+
+
+
+            const requestDetailsSpan = this.document.createElement("span");
+            requestDetailsSpan.innerHTML = "Request Details *";
+            requestDetailsSpan.style['padding-top'] = "10px";
+            requestDetailsSpan.style['margin-left'] = "15px";
+            requestDetailsSpan.style.display = "block";
+            requestDetailsSpan.style.width = "auto";
+            requestDetailsSpan.style['font-family'] = "Roboto";
+            requestDetailsSpan.style['font-weight'] = "400";
+            requestDetailsSpan.style['font-size'] = "14.5px";
+
+            const requestDetails = document.createElement("textarea");
+            requestDetails.setAttribute("id", "requestdetails");
+            requestDetails.rows = "3";
+            requestDetails.cols = "3";
+            requestDetails.style.resize = "none";
+            requestDetails.style['margin-left'] = "15px";
+            requestDetails.style.display = "block";
+            requestDetails.style['border-radius'] = "5px";
+            requestDetails.style.border = "1px solid lightgrey";
+            requestDetails.style.background = "none";
+            requestDetails.style.width = "766px";
+            requestDetails.style.outline = "none";
+            requestDetails.style['font-family'] = "Roboto";
+            requestDetails.style['font-weight'] = "400";
+            requestDetails.style['font-size'] = "14.5px";
+
+
+            const fileUploadSpan = this.document.createElement("span");
+            fileUploadSpan.innerHTML = "Screenshot or Screen Recording";
+            fileUploadSpan.style['padding-top'] = "10px";
+            fileUploadSpan.style['margin-left'] = "15px";
+            fileUploadSpan.style.display = "block";
+            fileUploadSpan.style.width = "auto";
+            fileUploadSpan.style['font-family'] = "Roboto";
+            fileUploadSpan.style['font-weight'] = "400";
+            fileUploadSpan.style['font-size'] = "14.5px";
+
+            const fileUploadDiv = document.createElement("div");
+            fileUploadDiv.style.display = "block";
+            fileUploadDiv.style['border-radius'] = "5px";
+            fileUploadDiv.style.border = "1px dashed #A9A8A8";
+            fileUploadDiv.style.background = "#F5F5F5";
+            fileUploadDiv.style['margin-left'] = "15px";
+            fileUploadDiv.style.width = "766px";
+            fileUploadDiv.style.height = "100px";
+            fileUploadDiv.style.outline = "none";
+            fileUploadDiv.style.height = "62px";
+
+            const fileUpload = document.createElement("input");
+            fileUpload.setAttribute("type", "file");
+            fileUpload.setAttribute("id", "fileUpload");
+            fileUpload.style.padding = "18px";
+            fileUpload.style['margin-left'] = "250px";
+            fileUpload.style.display = "block";
+            fileUpload.style['font-family'] = "Roboto";
+            fileUpload.style['font-weight'] = "400";
+            fileUpload.style['font-size'] = "14.5px";
+            fileUpload.addEventListener('change', (event) => {
+                var validFileExtensions = [".png", ".mov", ".jpeg", ".jpg", ".mp4", ".tiff"];
+                var arrInputs = document.getElementsByTagName("input");
+                for (var i = 0; i < arrInputs.length; i++) {
+                    var oInput = arrInputs[i];
+                    if (oInput.type == "file") {
+                        var sFileName = oInput.value;
+                        if (sFileName.length > 0) {
+                            var blnValid = false;
+                            for (var j = 0; j < validFileExtensions.length; j++) {
+                                var sCurExtension = validFileExtensions[j];
+                                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                                    blnValid = true;
+                                    return true;
+                                }
+                            }
+
+                            if (!blnValid) {
+                                alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + validFileExtensions.join(", "));
+                                event.target.value = "";
+                                return false;
+                            }
+                        }
+                    }
+                }
+            })
+
+
+
+            const checkpriority = document.createElement("input");
+            checkpriority.setAttribute("type", "checkbox");
+            checkpriority.setAttribute("id", "checkpriority");
+            checkpriority.style['box-sizing'] = "border-box";
+            checkpriority.style['font-size'] = "14px";
+            checkpriority.style.height = "1.3rem";
+            checkpriority.style.left = 0;
+            checkpriority.style['margin-left'] = "20px";
+            checkpriority.style.padding = "2px";
+            checkpriority.style.position = "absolute";
+            checkpriority.style['vertical-align'] = "baseline";
+            checkpriority.style['background'] = '#FFFFFF';
+            checkpriority.style.border = '1px solid #A9A8A8';
+            checkpriority.style['font-family'] = "Roboto";
+            checkpriority.style['font-weight'] = "400";
+            checkpriority.style['font-size'] = "14.5px";
+
+            var priorityLabel = document.createElement('label')
+            priorityLabel.htmlFor = "checkpriority";
+            priorityLabel.appendChild(document.createTextNode('This is a high priority and time sensitive request'));
+            priorityLabel.style.display = "inline-block";
+            priorityLabel.style.background = "none";
+            priorityLabel.style.color = "#000000";
+            priorityLabel.style['padding-top'] = "10px";
+            priorityLabel.style['margin-left'] = "40px";
+            priorityLabel.style['font-style'] = "italic";
+            priorityLabel.style['font-family'] = "Roboto";
+            priorityLabel.style['font-style'] = "italic";
+            priorityLabel.style['letter-spacing'] = '-0.02em';
+            priorityLabel.style['font-size'] = "12px";
+            priorityLabel.style['font-family'] = "Roboto";
+            priorityLabel.style['font-weight'] = "400";
+            priorityLabel.style['font-size'] = "14.5px";
+
+
+            const contactUs = document.createElement("input");
+            contactUs.setAttribute('type', 'button');
+            contactUs.setAttribute('value', 'Contact Us');
+            contactUs.setAttribute("id", "fixedbutton");
+            contactUs.style.width = "80px";
+            contactUs.style.height = "30px";
+            contactUs.style.position = "fixed";
+            contactUs.style.top = "40%";
+            contactUs.style.transform = "rotate(90deg)";
+            contactUs.style.left = "100%";
+            contactUs.style['transform-origin'] = "top left";
+            contactUs.style.background = "#205081";
+            contactUs.style.color = "white";
+            contactUs.style.border = "2px solid white";
+            contactUs.style['box-shadow'] = "0 0 5px rgb(0 0 0 / 50%)";
+            contactUs.style['border-radius'] = "0 0 5px 5px";
+            contactUs.style['font-family'] = "Roboto";
+            contactUs.style['font-weight'] = "400";
+            contactUs.style['font-size'] = "14.5px";
+
+            contactUs.addEventListener("click", toggleDisplay);
+
+            const submitRequestButton = document.createElement("input");
+            submitRequestButton.setAttribute('type', 'button');
+            submitRequestButton.setAttribute('value', 'Submit');
+            submitRequestButton.style.width = '200px';
+            submitRequestButton.style.height = '40px';
+            submitRequestButton.style['background-color'] = "#6A9B00";
+            submitRequestButton.style.color = "var(--ds-text-onBold, #fff)";
+            submitRequestButton.style.margin = "10px auto";
+            submitRequestButton.style.display = "block";
+            submitRequestButton.style['border-radius'] = "5px";
+            submitRequestButton.style.border = "1px solid lightgrey";
+            submitRequestButton.style.width = "766px";
+            submitRequestButton.style['text-align'] = "center";
+            submitRequestButton.style['padding-top'] = "8px";
+            submitRequestButton.style['font-weight'] = "bold";
+            submitRequestButton.style.cursor = "pointer";
+            submitRequestButton.style['font-family'] = "Roboto";
+            submitRequestButton.style['font-weight'] = "600";
+            submitRequestButton.style['font-size'] = "14.5px";
+            submitRequestButton.addEventListener("click", submitRequest);
+
+            
+            modalContent.appendChild(imageElem);
+            modalContent.appendChild(closeModal);
+            modalContent.appendChild(nameSpan);
+            modalContent.appendChild(nameinput);
+            modalContent.appendChild(emailSpan);
+            modalContent.appendChild(emaiInput);
+            modalContent.appendChild(phoneSpan);
+            modalContent.appendChild(phoneInput);
+            modalContent.appendChild(requestTypeSpan);
+            modalContent.appendChild(select);
+            modalContent.appendChild(requestDetailsSpan);
+            modalContent.appendChild(requestDetails);
+            modalContent.appendChild(fileUploadSpan);
+            fileUploadDiv.appendChild(fileUpload);
+            modalContent.appendChild(fileUploadDiv);
+            priorityLabel.appendChild(checkpriority);
+            modalContent.appendChild(priorityLabel);
+
+            modalContent.appendChild(submitRequestButton);
+            parentDiv.appendChild(modalContent);
+            document.body.appendChild(contactUs);
+            document.body.appendChild(parentDiv);
+            //fetch user name and email from SSO
+            fettchuser();
+
+        })
+
+        function toggleDisplay() {
+            if (document.getElementById("parentDiv").style.display === "none") {
+                document.getElementById("parentDiv").style.display = "block"
+                document.getElementById("parentDiv").style.height = "100%";
+                document.getElementById("parentDiv").style.width = "100%";
+            } else {
+                document.getElementById("parentDiv").style.display = "none";
+            }
+        }
+
+        function fettchuser() {
+            document.getElementById("modalContent").children[1].value = "";
+            document.getElementById("modalContent").children[2].value = ""
+
+        }
+
+        function submitRequest() {
+            alert('Coming soon');
+        }
+
+        function getFileTypes(document) {
+            var validFileExtensions = [".png", ".gif", ".jpeg", ".jpg", ".pdf", ".docx", ".doc", ".xls", ".xlsx"];
+            var arrInputs = document.getElementsByTagName("input");
+            for (var i = 0; i < arrInputs.length; i++) {
+                var oInput = arrInputs[i];
+                if (oInput.type == "file") {
+                    var sFileName = oInput.value;
+                    if (sFileName.length > 0) {
+                        var blnValid = false;
+                        for (var j = 0; j < validFileExtensions.length; j++) {
+                            var sCurExtension = validFileExtensions[j];
+                            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                                blnValid = true;
+                                return true;
+                            }
+                        }
+
+                        if (!blnValid) {
+                            alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + validFileExtensions.join(", "));
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+</html>
